@@ -1,0 +1,10 @@
+version: "3"
+services:
+  gpt-slack-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gpt-slack-bot
+    env_file: .env
+    ports:
+      - "8080:8080"
