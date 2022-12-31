@@ -11,6 +11,65 @@ import (
 	"github.com/xyzyxJP/gce-instance/model"
 )
 
+func Auth() {
+	url := "https://chat.openai.com/api/auth/session"
+	method := "GET"
+
+	client := &http.Client{}
+	req, err := http.NewRequest(method, url, nil)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	req.Header.Add("cookie", "__Secure-next-auth.session-token="+os.Getenv("OPENAI_TOKEN"))
+	req.Header.Add("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
+
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(body))
+}
+
+func Models() {
+	url := "https://chat.openai.com/backend-api/models"
+	method := "GET"
+
+	client := &http.Client{}
+	req, err := http.NewRequest(method, url, nil)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	req.Header.Add("authorization", "Bearer "+os.Getenv("OPENAI_TOKEN"))
+	req.Header.Add("cookie", "__Secure-next-auth.session-token="+os.Getenv("OPENAI_TOKEN"))
+	req.Header.Add("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
+
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(body))
+}
+
 func Scrape(query string) (string, error) {
 	url := "https://chat.openai.com/backend-api/conversation"
 	method := "POST"
